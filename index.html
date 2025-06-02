@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abordaje Diagnóstico de las Enfermedades Cardíacas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #005A9C;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        /* Main section styling */
+        .section, details.section > div {
+            background-color: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        details.section {
+            background-color: white;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        details.section > summary {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #0077B6;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 7px 7px 0 0; /* Slightly less rounded for top if open */
+        }
+        details.section[open] > summary {
+             border-bottom: 1px solid #ade8f4;
+             border-radius: 7px 7px 0 0;
+        }
+        details.section > summary::-webkit-details-marker { display: none; }
+        details.section > summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: #0077B6;
+            transition: transform 0.2s;
+        }
+        details.section[open] > summary::after {
+            transform: rotate(45deg);
+        }
+        .section h2 { /* For non-collapsible sections like "Consideraciones Generales" */
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #0077B6; 
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #ade8f4;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Sub-section (nested details) styling */
+        details.subsection {
+            margin-top: 1rem;
+            border: 1px solid #e0e7ff; /* Lighter border for subsections */
+            border-radius: 6px;
+            background-color: #f9fafb; /* Slightly off-white background */
+        }
+        details.subsection > summary {
+            font-size: 1.25rem; /* Smaller font for subsection titles */
+            font-weight: 600;
+            color: #023E8A; /* Darker blue for subsection titles */
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px 5px 0 0;
+        }
+         details.subsection[open] > summary {
+             border-bottom: 1px solid #c7d2fe; /* Lighter border for open subsection */
+             border-radius: 5px 5px 0 0;
+        }
+        details.subsection > summary::-webkit-details-marker { display: none; }
+        details.subsection > summary::after {
+            content: '+';
+            font-size: 1.2rem; /* Smaller marker */
+            color: #023E8A;
+            transition: transform 0.2s;
+        }
+        details.subsection[open] > summary::after {
+            transform: rotate(45deg);
+        }
+        details.subsection > div { /* Content of subsection */
+            padding: 1rem;
+            border-top: 1px solid #e0e7ff;
+        }
+
+        /* General content styling within sections/subsections */
+        .section h3, details.subsection h3 { /* h3 within any section content */
+            font-size: 1.25rem; /* Kept for consistency if h3 is used inside sub-sections */
+            font-weight: 600;
+            color: #023E8A; 
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        /* Ensure h3 inside subsection summary is not overridden by general h3 */
+        details.subsection > summary h3 {
+            font-size: inherit; /* Inherit from summary */
+            font-weight: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        .section p, .section ul, .section ol,
+        details.section > div p, details.section > div ul, details.section > div ol,
+        details.subsection > div p, details.subsection > div ul, details.subsection > div ol {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .section ul, details.section > div ul, details.subsection > div ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+        }
+        .section ol, details.section > div ol, details.subsection > div ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+        }
+
+        .table-container { overflow-x: auto; margin-bottom: 1rem; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+        th, td { border: 1px solid #cbd5e1; padding: 0.75rem; text-align: left; }
+        th { background-color: #e2e8f0; font-weight: 600; }
+        .case-study { border-left: 4px solid #0077B6; padding-left: 1rem; margin-top: 1.5rem; }
+        .question { margin-top: 1rem; margin-bottom: 0.5rem; font-weight: 600; }
+        .options li { margin-bottom: 0.25rem; padding: 0.25rem; border-radius: 4px; cursor: pointer; }
+        .options li:hover { background-color: #e0f7fa; }
+        .answer-reveal button { background-color: #0077B6; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; margin-top: 0.5rem; }
+        .answer-reveal button:hover { background-color: #005A9C; }
+        .answer { background-color: #e6fffa; border: 1px solid #b2f5ea; padding: 0.75rem; margin-top: 0.5rem; border-radius: 4px; }
+        
+        .nav-menu { background-color: #003B6D; padding: 0.5rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; justify-content: center; flex-wrap: wrap; }
+        .nav-menu a { color: white; padding: 0.5rem 1rem; text-decoration: none; font-weight: 500; border-radius: 4px; transition: background-color 0.3s ease; }
+        .nav-menu a:hover { background-color: #005A9C; }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.75rem; }
+            .header p { font-size: 1rem; }
+            .section h2, details.section > summary { font-size: 1.5rem; }
+            details.subsection > summary { font-size: 1.15rem; }
+            .section h3, details.subsection h3 { font-size: 1.1rem; }
+            .nav-menu { flex-direction: column; align-items: center; }
+            .nav-menu a { margin-bottom: 0.25rem; width: 90%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Abordaje Diagnóstico de las Enfermedades Cardíacas</h1>
+            <p>Dr. Carlos Adrián Nader Pérez</p>
+        </header>
+
+        <nav class="nav-menu" id="navbar">
+            <a href="#consideraciones">Consideraciones Generales</a>
+            <a href="#historia_clinica_det">Historia Clínica</a>
+            <a href="#sintomas_comunes_det">Síntomas Comunes</a>
+            <a href="#casos_clinicos_det">Casos Clínicos</a>
+        </nav>
+
+        <main>
+            <section id="consideraciones" class="section">
+                <h2>CONSIDERACIONES GENERALES</h2>
+                <p>La historia clínica del paciente es una característica fundamental en la evaluación de una enfermedad cardíaca sospechada o manifiesta. Incluye información sobre la enfermedad actual, enfermedades pasadas y los antecedentes familiares del paciente. A partir de esta información, se debe construir una cronología del proceso patológico del paciente. Determinar qué información de la historia clínica es útil requiere un conocimiento detallado de la fisiopatología de las enfermedades cardíacas. El esfuerzo dedicado a escuchar al paciente es tiempo bien invertido, ya que la causa de la enfermedad cardíaca a menudo se puede discernir a partir de la historia clínica.</p>
+            </section>
+
+            <details id="historia_clinica_det" class="section">
+                <summary>A. Historia Clínica</summary>
+                <div class="pt-4">
+                    <details class="subsection">
+                        <summary>1. Padecimiento Actual</summary>
+                        <div class="pt-2">
+                            <p>Se refiere a la cronología de eventos que llevaron a las quejas actuales del paciente. Es crucial detallar las características de los síntomas:</p>
+                            <ul>
+                                <li>Frecuencia, intensidad, severidad y duración.</li>
+                                <li>Factores precipitantes, agravantes y atenuantes.</li>
+                            </ul>
+                            <p>Es importante verificar diagnósticos previos con pruebas objetivas y revisar tratamientos anteriores y actuales, incluyendo medicamentos, dosis, efectividad y efectos secundarios.</p>
+                        </div>
+                    </details>
+
+                    <details class="subsection">
+                        <summary>2. Antecedente de Enfermedades Sistémicas</summary>
+                        <div class="pt-2">
+                            <p>Investigar enfermedades sistémicas con posible afectación cardíaca, como:</p>
+                             <ul>
+                                <li>Fiebre reumática (y sus manifestaciones como corea de Sydenham, artralgias, o faringitis frecuentes).</li>
+                                <li>Cáncer metastásico.</li>
+                                <li>Trastornos tiroideos.</li>
+                                <li>Diabetes mellitus.</li>
+                                <li>Enfermedades inflamatorias (ej. artritis reumatoide, lupus eritematoso sistémico).</li>
+                            </ul>
+                            <p>Considerar también eventos infantiles (cianosis, baja tolerancia al ejercicio, ausentismo escolar prolongado) y exposiciones (toxinas, agentes infecciosos, radioterapia, trauma torácico cerrado) relevantes para cardiopatías congénitas o adquiridas.</p>
+                        </div>
+                    </details>
+
+                    <details class="subsection">
+                        <summary>3. Factores de Riesgo Aterosclerótico</summary>
+                        <div class="pt-2">
+                            <p>La enfermedad cardiovascular aterosclerótica es común; es vital identificar factores de riesgo. Los más importantes son:</p>
+                            <ul>
+                                <li>Antecedentes familiares de enfermedad aterosclerótica prematura.</li>
+                                <li>Diabetes mellitus.</li>
+                                <li>Dislipidemia (colesterol LDL elevado).</li>
+                                <li>Hipertensión arterial.</li>
+                                <li>Tabaquismo.</li>
+                            </ul>
+                            <p>Factores de menor peso: sedentarismo, estrés elevado, bajo nivel socioeconómico, obesidad troncal. Existen calculadoras de riesgo cardiovascular en línea.</p>
+                        </div>
+                    </details>
+
+                    <details class="subsection">
+                        <summary>4. Antecedentes Familiares</summary>
+                        <div class="pt-2">
+                            <p>Esencial para evaluar riesgo de aterosclerosis y otras cardiopatías:</p>
+                            <ul>
+                                <li><strong>Cardiopatías congénitas:</strong> Más comunes si padres o hermanos afectados.</li>
+                                <li><strong>Enfermedades genéticas:</strong> Ej. trastornos neuromusculares, síndrome de Marfan.</li>
+                                <li><strong>Enfermedades adquiridas con agrupación familiar:</strong> Ej. valvulopatía reumática (por propagación de infección estreptocócica).</li>
+                            </ul>
+                            <p>La ausencia de HTA familiar puede orientar a causas secundarias en el paciente. Un historial familiar de secuelas ateroscleróticas (ACV, infartos, pérdida de extremidades) puede indicar una tendencia aterosclerótica familiar agresiva.</p>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <details id="sintomas_comunes_det" class="section">
+                <summary>B. Síntomas Comunes</summary>
+                <div class="pt-4">
+                    <details class="subsection">
+                        <summary>1. Dolor Torácico</summary>
+                        <div class="pt-2">
+                            <p>Síntoma cardinal de cardiopatía isquémica (ver Tabla 5-1), pero puede tener otras causas cardíacas. Características de la angina de pecho (dolor isquémico):</p>
+                            <ul>
+                                <li><strong>Localización:</strong> Subesternal, irradiado a hemitórax, hombros, cuello, mandíbula, brazos, epigastrio, espalda.</li>
+                                <li><strong>Carácter:</strong> Profundo, visceral, intenso (opresivo/pesadez), no insoportable.</li>
+                                <li><strong>Duración:</strong> Minutos (no segundos).</li>
+                                <li><strong>Precipitantes:</strong> Ejercicio, estrés emocional.</li>
+                                <li><strong>Alivio:</strong> Reposo, nitroglicerina sublingual.</li>
+                            </ul>
+                            <div class="table-container my-4">
+                                <h4>Tabla 5-1. Síntomas Comunes de Posible Origen Cardíaco</h4>
+                                <table>
+                                    <thead><tr><th>Síntoma</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Dolor o presión torácica</td></tr>
+                                        <tr><td>Disnea de esfuerzo</td></tr>
+                                        <tr><td>Disnea paroxística nocturna</td></tr>
+                                        <tr><td>Ortopnea</td></tr>
+                                        <tr><td>Síncope o presíncope</td></tr>
+                                        <tr><td>Déficits neurológicos transitorios</td></tr>
+                                        <tr><td>Edema</td></tr>
+                                        <tr><td>Palpitaciones</td></tr>
+                                        <tr><td>Tos</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>2. Disnea</summary>
+                        <div class="pt-2">
+                            <p>Queja frecuente, cuatro tipos principales:</p>
+                            <ul>
+                                <li><strong>Disnea de esfuerzo:</strong> Más común, sugiere condición leve (síntomas con aumento de demanda).</li>
+                                <li><strong>Disnea paroxística nocturna:</strong> Despertar con ahogo (tras ≥1h dormido/decúbito). Por redistribución de fluidos y sobrecarga. Sugiere condición más severa.</li>
+                                <li><strong>Ortopnea:</strong> Disnea inmediata al acostarse. Por leve aumento del retorno venoso. Sugiere enfermedad aún más severa.</li>
+                                <li><strong>Disnea en reposo:</strong> Sugiere enfermedad cardíaca severa.</li>
+                            </ul>
+                            <p>Nota: Disnea no es específica de cardiopatía (puede ser pulmonar, anemia, desacondicionamiento). Ortopnea también en EPOC. DPN es la más específica de origen cardíaco.</p>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>3. Síncope y Presíncope</summary>
+                        <div class="pt-2">
+                            <p>Mareo, vahído, presíncope, síncope: indican reducción de flujo sanguíneo cerebral. Inespecíficos (causas neurológicas, metabólicas, deshidratación, oído interno). Palpitaciones previas son significativas (sugieren arritmias).</p>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>4. Déficits Transitorios del Sistema Nervioso Central</summary>
+                        <div class="pt-2">
+                            <p>Ataques isquémicos transitorios (AIT): sugieren émbolos (corazón, grandes vasos, o raramente venosos por cortocircuito intracardíaco). Un AIT obliga a buscar enfermedad cardiovascular. Pérdida súbita de flujo a una extremidad también sugiere cardioembolismo.</p>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>5. Retención de Líquidos</summary>
+                        <div class="pt-2">
+                            <p>Inespecíficos, pero pueden deberse a función cardíaca reducida. Síntomas:</p>
+                            <ul>
+                                <li>Edema periférico, hinchazón, aumento de peso.</li>
+                                <li>Dolor abdominal (hepatomegalia/esplenomegalia).</li>
+                                <li>Disminución de apetito, diarrea, ictericia, náuseas/vómitos (por disfunción intestinal/hepática congestiva).</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>6. Palpitaciones</summary>
+                        <div class="pt-2">
+                            <p>Conciencia de la actividad cardíaca. Explorar la sensación con el paciente (ej. golpeteo). Tipos:</p>
+                            <ul>
+                                <li><strong>Actividad cardíaca fuerte a frecuencia normal (60-100 lpm):</strong> A menudo por catecolaminas (ansiedad).</li>
+                                <li><strong>"Corazón se detiene" / latidos aislados fuertes:</strong> Por extrasístoles (paciente siente pausa y/o latido fuerte post-pausa, "latidos omitidos").</li>
+                                <li><strong>Frecuencia cardíaca rápida (regular/irregular):</strong> Usualmente supraventricular. La más asociada a "palpitación".</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>7. Tos</summary>
+                        <div class="pt-2">
+                            <p>Puede tener origen cardíaco (usualmente seca/no productiva):</p>
+                            <ul>
+                                <li>Congestión pulmonar (insuficiencia cardíaca).</li>
+                                <li>Hipertensión pulmonar.</li>
+                                <li>Efecto secundario de inhibidores ECA.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <details id="casos_clinicos_det" class="section">
+                <summary>C. Casos Clínicos de Aplicación</summary>
+                <div class="pt-4">
+                    <details class="subsection">
+                        <summary>Caso Clínico 1</summary>
+                        <div class="pt-2">
+                            <article class="case-study !border-l-0 !pl-0 !mt-0"> <h3>Caso Clínico 1</h3>
+                                <p>Paciente masculino de 58 años, fumador de 1 cajetilla diaria desde hace 30 años, con diagnóstico de diabetes mellitus tipo 2 desde hace 10 años en tratamiento irregular. Acude a consulta por presentar desde hace 3 meses dolor opresivo retroesternal que aparece al caminar 2 cuadras o subir un piso de escaleras, con duración de 5-10 minutos, que cede con el reposo. El dolor se irradia ocasionalmente a brazo izquierdo y mandíbula.</p>
+                                <div class="question">1.1. De acuerdo con las características del dolor torácico isquémico, ¿cuál de las siguientes es MÁS consistente con angina de pecho en este paciente?</div>
+                                <ul class="options"><li>A) Dolor punzante de segundos de duración.</li><li>B) Dolor que se alivia con la inspiración profunda.</li><li>C) Dolor precipitado por el ejercicio y aliviado por el reposo.</li><li>D) Dolor localizado únicamente en el epigastrio.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans1_1')">Mostrar/Ocultar Respuesta</button><div id="ans1_1" class="answer hidden"><strong>Respuesta Correcta: C)</strong> El dolor anginoso típicamente se precipita por el esfuerzo y se alivia con el reposo o nitroglicerina.</div></div>
+                                <div class="question">1.2. ¿Cuál de los siguientes factores de riesgo presentes en el paciente incrementa MÁS significativamente su probabilidad de enfermedad cardiovascular aterosclerótica?</div>
+                                <ul class="options"><li>A) Edad.</li><li>B) Tabaquismo y diabetes mellitus.</li><li>C) Estrés laboral referido.</li><li>D) Falta de ejercicio regular.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans1_2')">Mostrar/Ocultar Respuesta</button><div id="ans1_2" class="answer hidden"><strong>Respuesta Correcta: B)</strong> El tabaquismo y la diabetes mellitus son factores de riesgo mayores y muy significativos para la enfermedad aterosclerótica.</div></div>
+                            </article>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>Caso Clínico 2</summary>
+                        <div class="pt-2">
+                           <article class="case-study !border-l-0 !pl-0 !mt-0">
+                                <h3>Caso Clínico 2</h3>
+                                <p>Paciente femenina de 72 años con antecedentes de hipertensión arterial sistémica de 15 años de evolución, en tratamiento con losartán. Refiere que desde hace 6 meses ha notado que se cansa más fácil al realizar sus actividades diarias (disnea de esfuerzo). En el último mes, se despierta súbitamente por las noches con sensación de ahogo (disnea paroxística nocturna) y necesita usar tres almohadas para poder dormir (ortopnea).</p>
+                                <div class="question">2.1. La paciente refiere "ortopnea de tres almohadas". ¿Qué sugiere este síntoma sobre la severidad de su posible condición cardíaca?</div>
+                                <ul class="options"><li>A) Indica una condición cardíaca leve.</li><li>B) Es un síntoma inespecífico sin valor diagnóstico.</li><li>C) Sugiere una enfermedad cardíaca más severa que la disnea de esfuerzo sola.</li><li>D) Es exclusivo de enfermedad pulmonar.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans2_1')">Mostrar/Ocultar Respuesta</button><div id="ans2_1" class="answer hidden"><strong>Respuesta Correcta: C)</strong> La ortopnea, especialmente si requiere múltiples almohadas, sugiere una enfermedad cardíaca más severa.</div></div>
+                                <div class="question">2.2. ¿Cuál de los tipos de disnea que presenta la paciente es considerado el más específico de enfermedad cardíaca?</div>
+                                <ul class="options"><li>A) Disnea de esfuerzo.</li><li>B) Ortopnea.</li><li>C) Disnea paroxística nocturna.</li><li>D) Disnea en reposo (no referida explícitamente en este grado).</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans2_2')">Mostrar/Ocultar Respuesta</button><div id="ans2_2" class="answer hidden"><strong>Respuesta Correcta: C)</strong> La disnea paroxística nocturna es quizás la más específica para la enfermedad cardíaca.</div></div>
+                            </article>
+                        </div>
+                    </details>
+                     <details class="subsection">
+                        <summary>Caso Clínico 3</summary>
+                        <div class="pt-2">
+                           <article class="case-study !border-l-0 !pl-0 !mt-0">
+                                <h3>Caso Clínico 3</h3>
+                                <p>Joven de 25 años, sin antecedentes de importancia, acude por episodios recurrentes de "corazón acelerado" que inician y terminan súbitamente, duran varios minutos y se acompañan de mareo leve. Ocasionalmente, siente como si su corazón "se detuviera un instante y luego diera un latido fuerte".</p>
+                                <div class="question">3.1. La sensación de "latidos omitidos" seguida de un latido fuerte es comúnmente causada por:</div>
+                                <ul class="options"><li>A) Ansiedad únicamente.</li><li>B) Contracciones ventriculares prematuras.</li><li>C) Una frecuencia cardíaca normal pero fuerte.</li><li>D) Bradicardia sinusal.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans3_1')">Mostrar/Ocultar Respuesta</button><div id="ans3_1" class="answer hidden"><strong>Respuesta Correcta: B)</strong> Esta sensación suele ser causada por contracciones ventriculares prematuras.</div></div>
+                                <div class="question">3.2. Si los episodios de taquicardia se acompañaran de síncope, ¿cuál sería la principal preocupación desde el punto de vista cardíaco?</div>
+                                <ul class="options"><li>A) Deshidratación severa.</li><li>B) Un problema primario del oído interno.</li><li>C) Una arritmia que compromete significativamente el flujo sanguíneo cerebral.</li><li>D) Hipoglucemia reactiva.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans3_2')">Mostrar/Ocultar Respuesta</button><div id="ans3_2" class="answer hidden"><strong>Respuesta Correcta: C)</strong> El síncope precedido por palpitaciones sugiere una arritmia como causa importante.</div></div>
+                            </article>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>Caso Clínico 4</summary>
+                        <div class="pt-2">
+                           <article class="case-study !border-l-0 !pl-0 !mt-0">
+                                <h3>Caso Clínico 4</h3>
+                                <p>Paciente masculino de 68 años con diagnóstico de fibrilación auricular crónica, en tratamiento con anticoagulantes orales de forma irregular. Presenta un episodio súbito de debilidad en hemicuerpo derecho y dificultad para hablar, que revierte completamente en menos de una hora.</p>
+                                <div class="question">4.1. ¿Cuál es la causa más probable del déficit neurológico transitorio en este paciente?</div>
+                                <ul class="options"><li>A) Crisis convulsiva focal.</li><li>B) Migraña con aura.</li><li>C) Un émbolo proveniente del corazón (cardioembolismo).</li><li>D) Hipotensión ortostática severa.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans4_1')">Mostrar/Ocultar Respuesta</button><div id="ans4_1" class="answer hidden"><strong>Respuesta Correcta: C)</strong> Los AIT en pacientes con fibrilación auricular sugieren fuertemente un origen cardioembólico.</div></div>
+                                <div class="question">4.2. ¿Qué antecedente en este paciente obliga a investigar una fuente cardíaca de embolia?</div>
+                                <ul class="options"><li>A) Su edad.</li><li>B) La irregularidad en la toma de anticoagulantes.</li><li>C) La presencia de fibrilación auricular.</li><li>D) La reversión completa de los síntomas.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans4_2')">Mostrar/Ocultar Respuesta</button><div id="ans4_2" class="answer hidden"><strong>Respuesta Correcta: C)</strong> La fibrilación auricular es una causa común de formación de trombos.</div></div>
+                            </article>
+                        </div>
+                    </details>
+                    <details class="subsection">
+                        <summary>Caso Clínico 5</summary>
+                        <div class="pt-2">
+                           <article class="case-study !border-l-0 !pl-0 !mt-0">
+                                <h3>Caso Clínico 5</h3>
+                                <p>Paciente femenina de 75 años con historia de infarto de miocardio hace 5 años e insuficiencia cardíaca con fracción de eyección reducida. En las últimas semanas ha notado hinchazón progresiva en ambos tobillos y piernas, aumento de 3 kg de peso y dolor en el hipocondrio derecho. También refiere una tos seca persistente desde que se ajustó su medicación hace dos meses, que incluye un inhibidor de la ECA.</p>
+                                <div class="question">5.1. Además del edema periférico, ¿qué otro síntoma de retención de líquidos podría explicar el dolor abdominal en esta paciente?</div>
+                                <ul class="options"><li>A) Gastritis medicamentosa.</li><li>B) Hepatomegalia congestiva.</li><li>C) Estreñimiento crónico.</li><li>D) Isquemia mesentérica.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans5_1')">Mostrar/Ocultar Respuesta</button><div id="ans5_1" class="answer hidden"><strong>Respuesta Correcta: B)</strong> La retención de líquidos puede causar hepatomegalia congestiva.</div></div>
+                                <div class="question">5.2. Respecto a la tos seca persistente, ¿cuál es una causa probable relacionada con su condición cardíaca o tratamiento?</div>
+                                <ul class="options"><li>A) Reflujo gastroesofágico.</li><li>B) Alergia estacional.</li><li>C) Efecto secundario del inhibidor de la ECA.</li><li>D) Infección respiratoria viral.</li></ul>
+                                <div class="answer-reveal"><button onclick="toggleAnswer('ans5_2')">Mostrar/Ocultar Respuesta</button><div id="ans5_2" class="answer hidden"><strong>Respuesta Correcta: C)</strong> Los IECA son una causa conocida de tos seca.</div></div>
+                            </article>
+                        </div>
+                    </details>
+                </div>
+            </details>
+        </main>
+    </div>
+
+    <script>
+        function toggleAnswer(id) {
+            const answerDiv = document.getElementById(id);
+            answerDiv.classList.toggle('hidden');
+        }
+
+        document.querySelectorAll('#navbar a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    // Open the main section if it's a details element and closed
+                    if (targetElement.tagName === 'DETAILS' && !targetElement.open) {
+                        targetElement.open = true;
+                    }
+                    
+                    // Attempt to find if the target is a subsection or a direct child of a main section
+                    let parentDetails = targetElement.closest('details.section:not(#' + targetId + ')');
+                    if (parentDetails && !parentDetails.open) {
+                        parentDetails.open = true;
+                    }
+                    
+                    // If the link itself points to a subsection summary, ensure its parent section is open
+                    if (targetElement.tagName === 'SUMMARY' && targetElement.parentElement.tagName === 'DETAILS' && targetElement.parentElement.classList.contains('subsection')) {
+                        let mainSectionParent = targetElement.closest('details.section');
+                        if (mainSectionParent && !mainSectionParent.open) {
+                           mainSectionParent.open = true;
+                        }
+                    }
+
+
+                    setTimeout(() => {
+                        // Recalculate offsetTop in case opening a parent shifted the layout
+                        let scrollTarget = targetElement;
+                        // If the link was to a summary of a subsection, we actually want to scroll to the subsection <details>
+                        if (targetElement.tagName === 'SUMMARY' && targetElement.parentElement.classList.contains('subsection')) {
+                            scrollTarget = targetElement.parentElement;
+                        }
+                         // If the link was to a summary of a main section, we actually want to scroll to the section <details>
+                        else if (targetElement.tagName === 'SUMMARY' && targetElement.parentElement.classList.contains('section')) {
+                            scrollTarget = targetElement.parentElement;
+                        }
+
+
+                        window.scrollTo({
+                            top: scrollTarget.offsetTop - 70, // Adjusted for potential fixed navbar
+                            behavior: 'smooth'
+                        });
+                    }, 150); // Increased delay slightly to ensure parent opens if needed and layout settles
+                }
+            });
+        });
+    </script>
+</body>
+</html>
